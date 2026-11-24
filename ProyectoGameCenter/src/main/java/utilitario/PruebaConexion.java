@@ -1,0 +1,12 @@
+
+package utilitario;
+
+public class PruebaConexion {
+
+    public static void main(String[] args) {
+        
+        Conexion.conectar();
+        
+    }
+    
+}
