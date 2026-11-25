@@ -1,2 +1,4 @@
 utilitario\Conexion.class
 utilitario\PruebaConexion.class
+controlador\ControladorCliente.class
+modelo\Cliente.class

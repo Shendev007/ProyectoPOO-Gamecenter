@@ -5,8 +5,6 @@ import java.sql.*;
 
 public class Conexion {
     
-    
-    //Reemplazar url, usuario y clave por el que corresponda.
     public static Connection conectar(){
         try {
             String url = "jdbc:mysql://localhost:3306/gamecenter";
@@ -26,4 +24,13 @@ public class Conexion {
             return null;
         }
     }  
+    //Reemplazar url, usuario y clave por el que corresponda.
+    /*public static Connection conectar() throws SQLException{
+        String url = "jdbc:msysql://localhost:3306/gamecenter";
+        String usuario = "root";
+        String clave = "4546";
+        Connection cn = DriverManager.getConnection(url, usuario, clave);
+        System.out.println("Conexion establecida correctamente");
+        return cn;
+    }*/  
 }
