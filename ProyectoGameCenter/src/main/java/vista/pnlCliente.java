@@ -22,7 +22,7 @@ public class pnlCliente extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtDniDniNuevo = new javax.swing.JTextField();
+        txtDniNuevo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         txtNombreNuevo = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -79,7 +79,7 @@ public class pnlCliente extends javax.swing.JPanel {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel2)
                                 .addGap(58, 58, 58)
-                                .addComponent(txtDniDniNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addComponent(txtDniNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(156, 156, 156)
                         .addComponent(btnGrabar)))
@@ -93,7 +93,7 @@ public class pnlCliente extends javax.swing.JPanel {
                 .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtDniDniNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDniNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -153,27 +153,19 @@ public class pnlCliente extends javax.swing.JPanel {
 
     private void btnGrabarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGrabarActionPerformed
         
-        //falta condición de que nombre no esté vació y que no tenga números en el setter.
-        String nombre = txtNombreNuevo.getText().trim();
-        if(nombre.isEmpty()){
-            JOptionPane.showMessageDialog(this, "Ingrese el nombre del cliente", "Campo inválido", JOptionPane.ERROR_MESSAGE);
-            txtNombreNuevo.requestFocus();
-            return;
-        }
-        
         try {
             Cliente c = new Cliente();
-            c.setDni(txtDniDniNuevo.getText().trim());
-            c.setNombre(nombre);
-            c.setTelefono(txtTelefonoNuevo.getText().trim());
-            c.setNametag(txtNametagNuevo.getText().trim());
+            c.setDni(txtDniNuevo.getText());
+            c.setNombre(txtNombreNuevo.getText());
+            c.setTelefono(txtTelefonoNuevo.getText());
+            c.setNametag(txtNametagNuevo.getText());
             
             con.registrarCliente(c);
             JOptionPane.showMessageDialog(this, "Cliente registrado correctamente", "Operación exitosa", JOptionPane.PLAIN_MESSAGE);
         } catch (IllegalArgumentException ex){
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Campo inválido", JOptionPane.WARNING_MESSAGE);
         } catch (ErrorBaseDatosException ex){
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error BD", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnGrabarActionPerformed
 
@@ -189,7 +181,7 @@ public class pnlCliente extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JTabbedPane tabHistorial;
-    private javax.swing.JTextField txtDniDniNuevo;
+    private javax.swing.JTextField txtDniNuevo;
     private javax.swing.JTextField txtNametagNuevo;
     private javax.swing.JTextField txtNombreNuevo;
     private javax.swing.JTextField txtTelefonoNuevo;

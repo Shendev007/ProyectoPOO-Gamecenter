@@ -1,5 +1,6 @@
 utilitario\Conexion.class
 utilitario\PruebaConexion.class
 utilitario\ErrorBaseDatosException.class
+vista\pnlCliente.class
 controlador\ControladorCliente.class
 modelo\Cliente.class

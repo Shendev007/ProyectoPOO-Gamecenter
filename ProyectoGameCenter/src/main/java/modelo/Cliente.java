@@ -36,8 +36,16 @@ public class Cliente {
     public String getNombre() {
         return nombre;
     }
-
+    
+    //Se indica la condición para llamar al setNombre
     public void setNombre(String nombre) {
+        if(nombre.isBlank()){
+            throw new IllegalArgumentException("Debe ingresar el nombre del cliente");
+        }
+        
+        if(!nombre.matches("\\p{L}+( +\\p{L}+)*")){
+            throw new IllegalArgumentException("El nombre solo puede contener letras y espacios");
+        }
         this.nombre = nombre;
     }
 
@@ -53,8 +61,6 @@ public class Cliente {
             return;
         }
         
-        telefono = telefono.trim();
-        
         if(!telefono.matches("9[0-9]{8}")){
             throw new IllegalArgumentException(
             "El telefono debe comenzar con 9 y tener exactamente 9 dígitos");
@@ -69,6 +75,10 @@ public class Cliente {
     }
 
     public void setNametag(String nametag) {
-        this.nametag = nametag;
+        if(nametag == null || nametag.isBlank()){
+            this.nametag = null;
+            return;
+        }
+        this.nametag = nametag.trim();
     }
 }
