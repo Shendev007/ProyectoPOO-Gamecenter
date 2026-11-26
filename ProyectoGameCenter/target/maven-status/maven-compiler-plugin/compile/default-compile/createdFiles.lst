@@ -1,4 +1,5 @@
 utilitario\Conexion.class
 utilitario\PruebaConexion.class
+utilitario\ErrorBaseDatosException.class
 controlador\ControladorCliente.class
 modelo\Cliente.class

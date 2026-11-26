@@ -1,18 +1,19 @@
 
 package utilitario;
 
+import javax.swing.JOptionPane;
+import modelo.Cliente;
+import controlador.*;
 public class PruebaConexion {
 
     public static void main(String[] args) {
         
-        Conexion.conectar();
-
-        
-        /* try {
+        try {
             Conexion.conectar();
-        } catch (Exception ex) {
-            ex.getMessage();
+            System.out.println("Conexion exitosa");
+        } catch (ErrorBaseDatosException ex) {
+            System.err.println(ex.getMessage());
         }
-        */
+
     }
-}
+} 
