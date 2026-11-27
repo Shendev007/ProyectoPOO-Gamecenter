@@ -354,7 +354,7 @@ public class pnlCliente extends javax.swing.JPanel {
     }//GEN-LAST:event_btnGrabarActionPerformed
 
     private void btnConsultarListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarListaActionPerformed
-        //cargar lista nuevamente pero con el del dni
+
     }//GEN-LAST:event_btnConsultarListaActionPerformed
 
 
