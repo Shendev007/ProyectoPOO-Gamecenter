@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 public class pnlCliente extends javax.swing.JPanel {
     
     ControladorCliente con = new ControladorCliente();
+    String idCliente;
 
     public pnlCliente() {
         initComponents();
@@ -29,6 +30,7 @@ public class pnlCliente extends javax.swing.JPanel {
                 };
                 dt.addRow(o);
             }
+            btnLista.setEnabled(false);
         } catch (ErrorBaseDatosException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Error al cargar clientes", JOptionPane.ERROR_MESSAGE);
         }
@@ -61,7 +63,7 @@ public class pnlCliente extends javax.swing.JPanel {
         tablaListaClientes = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         lblClienteCod = new javax.swing.JLabel();
-        txtLDniModificar = new javax.swing.JTextField();
+        txtDniModificar = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         txtNombreModificar = new javax.swing.JTextField();
@@ -71,6 +73,7 @@ public class pnlCliente extends javax.swing.JPanel {
         txtNametagModificar = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
+        btnLista = new javax.swing.JToggleButton();
         jPanel3 = new javax.swing.JPanel();
 
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
@@ -136,7 +139,7 @@ public class pnlCliente extends javax.swing.JPanel {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(156, 156, 156)
                         .addComponent(btnGrabar)))
-                .addContainerGap(182, Short.MAX_VALUE))
+                .addContainerGap(183, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -187,6 +190,11 @@ public class pnlCliente extends javax.swing.JPanel {
                 "Código", "DNI", "Nombre", "Telefono", "Nametag"
             }
         ));
+        tablaListaClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tablaListaClientesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tablaListaClientes);
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -209,33 +217,28 @@ public class pnlCliente extends javax.swing.JPanel {
         jLabel13.setText("Nametag:");
 
         jButton1.setText("GUARDAR CAMBIOS");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel14.setText("MODIFICAR");
 
+        btnLista.setText("Lista");
+        btnLista.addActionListener(this::btnListaActionPerformed);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(jLabel7)
-                .addGap(18, 18, 18)
-                .addComponent(txtBuscarDniLista)
-                .addGap(18, 18, 18)
-                .addComponent(btnConsultarLista, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 36, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblClienteCod)
-                            .addComponent(jLabel8))))
-                .addGap(15, 15, 15))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(163, 163, 163))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton1)
+                        .addGap(182, 182, 182))))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(55, 55, 55)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -248,7 +251,7 @@ public class pnlCliente extends javax.swing.JPanel {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel10)
                                 .addGap(18, 18, 18)
-                                .addComponent(txtLDniModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtDniModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -264,14 +267,26 @@ public class pnlCliente extends javax.swing.JPanel {
                         .addGap(135, 135, 135)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(163, 163, 163))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(182, 182, 182))))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addComponent(jLabel7)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtBuscarDniLista, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnConsultarLista, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLista, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblClienteCod)
+                                    .addComponent(jLabel8))))))
+                .addGap(15, 15, 15))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,7 +297,8 @@ public class pnlCliente extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtBuscarDniLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnConsultarLista))
+                    .addComponent(btnConsultarLista)
+                    .addComponent(btnLista))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -294,7 +310,7 @@ public class pnlCliente extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(txtLDniModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtDniModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12)
                     .addComponent(txtTelefonoModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -314,7 +330,7 @@ public class pnlCliente extends javax.swing.JPanel {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 511, Short.MAX_VALUE)
+            .addGap(0, 512, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -354,13 +370,88 @@ public class pnlCliente extends javax.swing.JPanel {
     }//GEN-LAST:event_btnGrabarActionPerformed
 
     private void btnConsultarListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarListaActionPerformed
-
+        
+        String dni = txtBuscarDniLista.getText();
+        
+        if(!dni.matches("[0-9]{8}") || dni.isBlank()){
+            JOptionPane.showMessageDialog(this, "Ingresa un DNI de 8 dígitos", "Error de ingreso", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        try {
+            Cliente c = con.buscarPorDni(dni);
+            DefaultTableModel dt = (DefaultTableModel) tablaListaClientes.getModel();
+            dt.setRowCount(0);
+            
+            if(c==null){
+                JOptionPane.showMessageDialog(this, "Cliente no encontrado", "Error de ingreso", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            Object o[] ={c.getId_cliente(), c.getDni(), c.getNombre(),
+                    c.getTelefono(), c.getNametag()
+            };
+            dt.addRow(o);
+            txtBuscarDniLista.setText("");
+            btnLista.setEnabled(true);
+        } catch (ErrorBaseDatosException ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(),"Error al buscar", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnConsultarListaActionPerformed
+
+    private void btnListaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaActionPerformed
+        cargarClientes();
+    }//GEN-LAST:event_btnListaActionPerformed
+
+    private void tablaListaClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaListaClientesMouseClicked
+        
+        int fila = tablaListaClientes.getSelectedRow();
+        
+        idCliente = (String)tablaListaClientes.getValueAt(fila, 0);
+        lblClienteCod.setText("Cliente: "+idCliente);
+        txtDniModificar.setText((String)tablaListaClientes.getValueAt(fila, 1));
+        txtNombreModificar.setText((String)tablaListaClientes.getValueAt(fila, 2));
+        txtTelefonoModificar.setText((String)tablaListaClientes.getValueAt(fila, 3));
+        txtNametagModificar.setText((String)tablaListaClientes.getValueAt(fila, 4));
+    }//GEN-LAST:event_tablaListaClientesMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        if(idCliente == null){
+            JOptionPane.showMessageDialog(this, "Selecciona un cliente de la tabla", "Error al modificar", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        try {
+            Cliente c = new Cliente();
+            c.setId_cliente(idCliente);
+            c.setNombre(txtNombreModificar.getText());
+            c.setDni(txtDniModificar.getText());
+            c.setTelefono(txtTelefonoModificar.getText());
+            c.setNametag(txtNametagModificar.getText());
+            con.modificarCliente(c);
+            JOptionPane.showMessageDialog(this, "Cliente modificado correctamente", "Cambio completo", JOptionPane.INFORMATION_MESSAGE);
+            tablaListaClientes.clearSelection();
+            
+            lblClienteCod.setText("Cliente: ");
+            txtNombreModificar.setText("");
+            txtDniModificar.setText("");
+            txtTelefonoModificar.setText("");
+            txtNametagModificar.setText("");
+            idCliente=null;
+        } catch (IllegalArgumentException ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Campo inválido", JOptionPane.ERROR_MESSAGE);
+        } catch (ErrorBaseDatosException ex){
+            JOptionPane.showMessageDialog(jButton1, ex.getMessage(),"Error al modificar", JOptionPane.WARNING_MESSAGE);
+        }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnConsultarLista;
     private javax.swing.JButton btnGrabar;
+    private javax.swing.JToggleButton btnLista;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -385,8 +476,8 @@ public class pnlCliente extends javax.swing.JPanel {
     private javax.swing.JTabbedPane tabHistorial;
     private javax.swing.JTable tablaListaClientes;
     private javax.swing.JTextField txtBuscarDniLista;
+    private javax.swing.JTextField txtDniModificar;
     private javax.swing.JTextField txtDniNuevo;
-    private javax.swing.JTextField txtLDniModificar;
     private javax.swing.JTextField txtNametagModificar;
     private javax.swing.JTextField txtNametagNuevo;
     private javax.swing.JTextField txtNombreModificar;
