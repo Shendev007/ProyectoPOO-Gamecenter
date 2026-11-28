@@ -1,0 +1,65 @@
+@startuml
+title Diagrama de clases MVC del módulo Máquinas
+skinparam classAttributeIconSize 0
+hide empty members
+class PnlMaquina <<vista>> {
+  ~idMaquinaSeleccionada : String
+  +PnlMaquina()
+  +cargarMaquinas() : void
+  +cargarTarifas() : void
+}
+class ControladorMaquina <<controlador>> {
+  +listarTipoMaquina() : List<TipoMaquina>
+  +registrarMaquina(m : Maquina) : void
+  +listarMaquina() : List<Maquina>
+  +modificarMaquina(m : Maquina) : void
+  +actualizarTarifa(t : TipoMaquina) : void
+}
+class Maquina <<modelo>> {
+  -id_maquina : String
+  -nombre_maquina : String
+  -estado_maquina : String
+  +getId_maquina() : String
+  +setId_maquina(id_maquina : String) : void
+  +getNombre_maquina() : String
+  +setNombre_maquina(nombre_maquina : String) : void
+  +getTipo() : TipoMaquina
+  +setTipo(tipo : TipoMaquina) : void
+  +getEstado_maquina() : String
+  +setEstado_maquina(estado_maquina : String) : void
+}
+class TipoMaquina <<modelo>> {
+  -id_tipo : String
+  -nombre_tipo : String
+  -tarifa_hora : double
+  +getId_tipo() : String
+  +setId_tipo(id_tipo : String) : void
+  +getNombre_tipo() : String
+  +setNombre_tipo(nombre_tipo : String) : void
+  +getTarifa_hora() : double
+  +setTarifa_hora(tarifa_hora : double) : void
+}
+class Conexion <<utilitario>> {
+  {static} +conectar() : Connection
+}
+class ErrorBaseDatosException <<utilitario>> {
+  +ErrorBaseDatosException(mensaje : String, causa : Throwable)
+}
+class JPanel <<Swing>> {
+}
+class RuntimeException <<Java>> {
+}
+PnlMaquina --|> JPanel
+PnlMaquina --> ControladorMaquina : invoca
+ControladorMaquina ..> Conexion : solicita conexión
+Conexion ..> ErrorBaseDatosException : lanza
+ControladorMaquina ..> ErrorBaseDatosException : lanza
+PnlMaquina ..> ErrorBaseDatosException : captura
+ErrorBaseDatosException --|> RuntimeException
+ControladorMaquina ..> Maquina : usa
+ControladorMaquina ..> TipoMaquina : usa
+PnlMaquina ..> Maquina : crea y lee
+Maquina "0..*" --> "1" TipoMaquina : tipo
+PnlMaquina --> "0..1" TipoMaquina : tipoComputadora
+PnlMaquina --> "0..1" TipoMaquina : tipoConsola
+@enduml

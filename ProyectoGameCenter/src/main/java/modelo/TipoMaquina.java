@@ -30,7 +30,7 @@ public class TipoMaquina {
     //Se indica la condición para llamar al setTarifa_hora
     public void setTarifa_hora(double tarifa_hora) {
         
-        if(tarifa_hora<= 0){
+        if(!Double.isFinite(tarifa_hora)|| tarifa_hora<= 0){
             throw new IllegalArgumentException("La tarifa por hora debe ser mayor que cero");
         }
         this.tarifa_hora = tarifa_hora;

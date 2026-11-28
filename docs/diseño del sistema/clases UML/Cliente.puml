@@ -1,0 +1,52 @@
+@startuml
+title Diagrama de clases MVC del módulo Clientes
+skinparam classAttributeIconSize 0
+hide empty members
+class pnlCliente <<vista>> {
+  ~idClienteSeleccionado : String
+  +pnlCliente()
+  +cargarClientes() : void
+}
+class ControladorCliente <<controlador>> {
+  +listarClientes() : List<Cliente>
+  +buscarPorDni(dni : String) : Cliente
+  +registrarCliente(c : Cliente) : void
+  +modificarCliente(c : Cliente) : void
+}
+class Cliente <<modelo>> {
+  -id_cliente : String
+  -dni : String
+  -nombre : String
+  -telefono : String
+  -nametag : String
+  +getId_cliente() : String
+  +setId_cliente(id_cliente : String) : void
+  +getDni() : String
+  +setDni(dni : String) : void
+  +getNombre() : String
+  +setNombre(nombre : String) : void
+  +getTelefono() : String
+  +setTelefono(telefono : String) : void
+  +getNametag() : String
+  +setNametag(nametag : String) : void
+}
+class Conexion <<utilitario>> {
+  {static} +conectar() : Connection
+}
+class ErrorBaseDatosException <<utilitario>> {
+  +ErrorBaseDatosException(mensaje : String, causa : Throwable)
+}
+class JPanel <<Swing>> {
+}
+class RuntimeException <<Java>> {
+}
+pnlCliente --|> JPanel
+pnlCliente --> ControladorCliente : invoca
+ControladorCliente ..> Conexion : solicita conexión
+Conexion ..> ErrorBaseDatosException : lanza
+ControladorCliente ..> ErrorBaseDatosException : lanza
+pnlCliente ..> ErrorBaseDatosException : captura
+ErrorBaseDatosException --|> RuntimeException
+ControladorCliente ..> Cliente : usa
+pnlCliente ..> Cliente : crea y lee
+@enduml

@@ -100,7 +100,7 @@ public class ControladorMaquina {
     }
     
     public void actualizarTarifa(TipoMaquina t){
-        String sql = "UPDATE TipoMaquina SET tarifa_hora = ?"
+        String sql = "UPDATE TipoMaquina SET tarifa_hora = ? "
                    + "WHERE id_tipo = ?";
         try (Connection cn = Conexion.conectar()){
             PreparedStatement st = cn.prepareStatement(sql);
