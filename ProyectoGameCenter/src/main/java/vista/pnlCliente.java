@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableModel;
 public class pnlCliente extends javax.swing.JPanel {
     
     ControladorCliente con = new ControladorCliente();
-    String idCliente;
+    String idClienteSeleccionado;
 
     public pnlCliente() {
         initComponents();
@@ -19,12 +19,14 @@ public class pnlCliente extends javax.swing.JPanel {
     }
     
     public void cargarClientes(){
-        DefaultTableModel dt = (DefaultTableModel) tablaListaClientes.getModel();
+        
         try {
-            List<Cliente> lista = new ArrayList<>();
+            List<Cliente> lista = con.listarClientes();
+            DefaultTableModel dt = (DefaultTableModel) tablaListaClientes.getModel();
             dt.setRowCount(0);
+            idClienteSeleccionado=null;
             
-            for(Cliente c:con.listarClientes()){
+            for(Cliente c:lista){
                 Object[] o = {
                 c.getId_cliente(), c.getDni(), c.getNombre(), c.getTelefono(), c.getNametag()
                 };
@@ -42,7 +44,7 @@ public class pnlCliente extends javax.swing.JPanel {
 
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        tabHistorial = new javax.swing.JTabbedPane();
+        tabCliente = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -71,7 +73,7 @@ public class pnlCliente extends javax.swing.JPanel {
         txtTelefonoModificar = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         txtNametagModificar = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnGuardarCambios = new javax.swing.JButton();
         jLabel14 = new javax.swing.JLabel();
         btnLista = new javax.swing.JToggleButton();
         jPanel3 = new javax.swing.JPanel();
@@ -162,7 +164,7 @@ public class pnlCliente extends javax.swing.JPanel {
                 .addGap(34, 34, 34))
         );
 
-        tabHistorial.addTab("Nuevo", jPanel1);
+        tabCliente.addTab("Nuevo", jPanel1);
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -184,7 +186,15 @@ public class pnlCliente extends javax.swing.JPanel {
             new String [] {
                 "Código", "DNI", "Nombre", "Telefono", "Nametag"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tablaListaClientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tablaListaClientesMouseClicked(evt);
@@ -211,8 +221,8 @@ public class pnlCliente extends javax.swing.JPanel {
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel13.setText("Nametag:");
 
-        jButton1.setText("GUARDAR CAMBIOS");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        btnGuardarCambios.setText("GUARDAR CAMBIOS");
+        btnGuardarCambios.addActionListener(this::btnGuardarCambiosActionPerformed);
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -232,7 +242,7 @@ public class pnlCliente extends javax.swing.JPanel {
                         .addComponent(jLabel6)
                         .addGap(163, 163, 163))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1)
+                        .addComponent(btnGuardarCambios)
                         .addGap(182, 182, 182))))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(55, 55, 55)
@@ -315,11 +325,11 @@ public class pnlCliente extends javax.swing.JPanel {
                     .addComponent(jLabel13)
                     .addComponent(txtNametagModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(29, 29, 29)
-                .addComponent(jButton1)
+                .addComponent(btnGuardarCambios)
                 .addGap(15, 15, 15))
         );
 
-        tabHistorial.addTab("Modificar", jPanel2);
+        tabCliente.addTab("Modificar", jPanel2);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -332,17 +342,17 @@ public class pnlCliente extends javax.swing.JPanel {
             .addGap(0, 493, Short.MAX_VALUE)
         );
 
-        tabHistorial.addTab("Historial", jPanel3);
+        tabCliente.addTab("Historial", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabHistorial)
+            .addComponent(tabCliente)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabHistorial)
+            .addComponent(tabCliente)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -368,7 +378,7 @@ public class pnlCliente extends javax.swing.JPanel {
         } catch (IllegalArgumentException ex){
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Campo inválido", JOptionPane.WARNING_MESSAGE);
         } catch (ErrorBaseDatosException ex){
-            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error BD", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de base de datos", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnGrabarActionPerformed
 
@@ -410,32 +420,34 @@ public class pnlCliente extends javax.swing.JPanel {
         txtDniModificar.setText("");
         txtTelefonoModificar.setText("");
         txtNametagModificar.setText("");
-        idCliente=null;
         
     }//GEN-LAST:event_btnListaActionPerformed
 
     private void tablaListaClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaListaClientesMouseClicked
         
         int fila = tablaListaClientes.getSelectedRow();
+        if(fila<0){
+            return;
+        }
         
-        idCliente = (String)tablaListaClientes.getValueAt(fila, 0);
-        lblClienteCod.setText("Cliente: "+idCliente);
+        idClienteSeleccionado = (String)tablaListaClientes.getValueAt(fila, 0);
+        lblClienteCod.setText("Cliente: "+idClienteSeleccionado);
         txtDniModificar.setText((String)tablaListaClientes.getValueAt(fila, 1));
         txtNombreModificar.setText((String)tablaListaClientes.getValueAt(fila, 2));
         txtTelefonoModificar.setText((String)tablaListaClientes.getValueAt(fila, 3));
         txtNametagModificar.setText((String)tablaListaClientes.getValueAt(fila, 4));
     }//GEN-LAST:event_tablaListaClientesMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnGuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarCambiosActionPerformed
         
-        if(idCliente == null){
+        if(idClienteSeleccionado == null){
             JOptionPane.showMessageDialog(this, "Selecciona un cliente de la tabla", "Error al modificar", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
         try {
             Cliente c = new Cliente();
-            c.setId_cliente(idCliente);
+            c.setId_cliente(idClienteSeleccionado);
             c.setNombre(txtNombreModificar.getText());
             c.setDni(txtDniModificar.getText());
             c.setTelefono(txtTelefonoModificar.getText());
@@ -449,23 +461,24 @@ public class pnlCliente extends javax.swing.JPanel {
             txtDniModificar.setText("");
             txtTelefonoModificar.setText("");
             txtNametagModificar.setText("");
-            idCliente=null;
             cargarClientes();
             
         } catch (IllegalArgumentException ex){
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Campo inválido", JOptionPane.ERROR_MESSAGE);
+        } catch (IllegalStateException ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(),"Cambios no guardados", JOptionPane.WARNING_MESSAGE);
         } catch (ErrorBaseDatosException ex){
-            JOptionPane.showMessageDialog(jButton1, ex.getMessage(),"Error al modificar", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, ex.getMessage(),"Error al modificar", JOptionPane.WARNING_MESSAGE);
         }
         
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnGuardarCambiosActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton btnConsultarLista;
     private javax.swing.JButton btnGrabar;
+    private javax.swing.JButton btnGuardarCambios;
     private javax.swing.JToggleButton btnLista;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -486,7 +499,7 @@ public class pnlCliente extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable2;
     private javax.swing.JLabel lblClienteCod;
-    private javax.swing.JTabbedPane tabHistorial;
+    private javax.swing.JTabbedPane tabCliente;
     private javax.swing.JTable tablaListaClientes;
     private javax.swing.JTextField txtBuscarDniLista;
     private javax.swing.JTextField txtDniModificar;

@@ -72,14 +72,15 @@ public class ControladorCliente {
     
     public void modificarCliente (Cliente c){
         String sql = "UPDATE Cliente "
-                   + "SET dni = ?, telefono = ?, nametag = ? "
+                   + "SET dni = ?, nombre_cliente = ?, telefono = ?, nametag = ? "
                    + "WHERE id_cliente = ?";
         try(Connection cn = Conexion.conectar()){
             PreparedStatement st = cn.prepareStatement(sql);
             st.setString(1, c.getDni());
-            st.setString(2, c.getTelefono());
-            st.setString(3, c.getNametag());
-            st.setString(4, c.getId_cliente());
+            st.setString(2, c.getNombre());
+            st.setString(3, c.getTelefono());
+            st.setString(4, c.getNametag());
+            st.setString(5, c.getId_cliente());
             st.executeUpdate();
         } catch (SQLException ex) {
             throw new ErrorBaseDatosException("Error al modificar el cliente", ex);

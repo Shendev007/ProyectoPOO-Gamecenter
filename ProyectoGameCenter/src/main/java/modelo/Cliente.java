@@ -25,8 +25,7 @@ public class Cliente {
     public void setDni(String dni) {
         
         if(!dni.matches("[0-9]{8}")){
-            throw new IllegalArgumentException(
-            "El DNI es obligatorio y debe contener exactamente 8 dígitos");
+            throw new IllegalArgumentException("El DNI es obligatorio y debe contener exactamente 8 dígitos");
         }
         
         this.dni = dni;
@@ -62,8 +61,7 @@ public class Cliente {
         }
         
         if(!telefono.matches("9[0-9]{8}")){
-            throw new IllegalArgumentException(
-            "El telefono debe comenzar con 9 y tener exactamente 9 dígitos");
+            throw new IllegalArgumentException("El telefono debe comenzar con 9 y tener exactamente 9 dígitos");
         }
         
         this.telefono = telefono;
@@ -73,7 +71,8 @@ public class Cliente {
     public String getNametag() {
         return nametag;
     }
-
+    
+    //Se indica la condición para llamar al setNametag
     public void setNametag(String nametag) {
         if(nametag == null || nametag.isBlank()){
             this.nametag = null;
