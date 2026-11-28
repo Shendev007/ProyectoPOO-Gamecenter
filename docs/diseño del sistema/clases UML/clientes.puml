@@ -1,0 +1,51 @@
+@startuml
+skinparam classAttributeIconSize 0
+title Diagrama de clases MVC del módulo Clientes
+
+class JPanel <<Swing>>
+
+class pnlCliente <<vista>> {
+    ~idCliente : String
+    +pnlCliente()
+    +cargarClientes() : void
+}
+
+class ControladorCliente <<controlador>> {
+    +registrarCliente(cliente : Cliente) : void
+    +buscarPorDni(dni : String) : Cliente
+    +listarClientes() : List<Cliente>
+    +modificarCliente(cliente : Cliente) : void
+}
+
+class Cliente <<modelo>> {
+    -id_cliente : String
+    -dni : String
+    -nombre : String
+    -telefono : String
+    -nametag : String
+    +setDni(dni : String) : void
+    +setNombre(nombre : String) : void
+    +setTelefono(telefono : String) : void
+    +setNametag(nametag : String) : void
+}
+
+JPanel <|-- pnlCliente
+pnlCliente --> ControladorCliente : invoca
+pnlCliente ..> Cliente : crea y lee
+ControladorCliente ..> Cliente : recibe y devuelve
+
+class RuntimeException <<Java>>
+
+class ErrorBaseDatosException <<utilitario>>
+
+class Conexion <<utilitario>> {
+    {static} +conectar() : Connection
+}
+
+ControladorCliente ..> Conexion : solicita conexión
+Conexion ..> ErrorBaseDatosException : lanza
+
+RuntimeException <|-- ErrorBaseDatosException
+ControladorCliente ..> ErrorBaseDatosException : lanza
+pnlCliente ..> ErrorBaseDatosException : captura
+@enduml
